@@ -1,6 +1,6 @@
 import os
-import time
 import web3
+import json
 from typing import Any, Callable, Tuple
 from hexbytes import HexBytes
 from eth_account.signers.local import LocalAccount
@@ -9,6 +9,7 @@ from logging import getLogger
 
 from src.contract_abi import abi
 
+current_dir= os.path.dirname(os.path.realpath(__file__))
 logger= getLogger("Adoption Interface")
 
 CONTRACT_ADDRESS= "0x876774b41083ed93499471062985a9581885834C"
@@ -21,6 +22,8 @@ if os.getenv("PRIVATE_KEY_DEV_META") is None:
     logger.error(msg)
     raise RuntimeError(msg)
 
+with open(current_dir+"/data/contract_abi.json", "r") as file:
+    abi = json.dumps(json.load(file))
 
 w3= web3.Web3(web3.HTTPProvider(BASE_INFURA_URL+PROJECT_ID))
 contract= w3.eth.contract(address= CONTRACT_ADDRESS,
@@ -74,7 +77,8 @@ def transaction_method(contract: Contract,
 
     return w3.eth.send_raw_transaction(signed_txn.rawTransaction)
 
-transaction_method(contract, account, "adoptAnimal", **{"_petId": 0})
+transaction_method(contract, account, "adoptAnimal", **{"_petId": 3})
+call_method(contract, "getAdopters")
 
 if __name__ == "__main__":
     pass
