@@ -5,16 +5,16 @@ contract Adoption {
         string kind;
         uint age;
     }
-    uint constant maxAnimal= 10; // max number of available animals.
-    uint constant dogProba= 60;
+    uint constant MAX_ANIMAL= 10; // max number of available animals.
+    uint constant DOG_PROBA= 60;
     uint8 randNone= 0; // may overflow, this is not an issue
-    address[maxAnimal] private adopters;
-    Animal[maxAnimal] private animals;
+    address[MAX_ANIMAL] private adopters;
+    Animal[MAX_ANIMAL] private animals;
 
     event AdoptAnimalEvent(uint id, address owner);
 
     function adoptAnimal(uint _petId) public {
-        require(_petId>= 0 && _petId < maxAnimal);
+        require(_petId>= 0 && _petId < MAX_ANIMAL);
         if (adopters[_petId] == address(0)) {
             animals[_petId]= Animal(
                 generateAnimalKind(),
@@ -30,7 +30,7 @@ contract Adoption {
     function generateAnimalKind() public returns (string memory kind){
         uint proba= uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, randNone))) % 100;
         randNone++; // can overflow, this is not an issue
-        if (proba < dogProba) {
+        if (proba < DOG_PROBA) {
             kind= "dog";
         } else {
             kind= "cat";
@@ -42,11 +42,11 @@ contract Adoption {
         return uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, randNone))) % 100;
     }
 
-    function getAdopters() public view returns (address[maxAnimal] memory) {
+    function getAdopters() public view returns (address[MAX_ANIMAL] memory) {
         return adopters;
     }
 
-    function getAnimals() public view returns (Animal[maxAnimal] memory) {
+    function getAnimals() public view returns (Animal[MAX_ANIMAL] memory) {
         return animals;
     }
 
