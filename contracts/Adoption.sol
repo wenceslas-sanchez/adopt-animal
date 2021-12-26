@@ -2,6 +2,7 @@ pragma solidity ^0.8.11;
 
 contract Adoption {
     struct Animal {
+        string name;
         string kind;
         uint age;
     }
@@ -13,10 +14,15 @@ contract Adoption {
 
     event AdoptAnimalEvent(uint id, address owner);
 
-    function adoptAnimal(uint _petId) public {
-        require(_petId>= 0 && _petId < MAX_ANIMAL);
+    function adoptAnimal(uint _petId, string memory _name) public {
+        require(_petId>= 0 && _petId < MAX_ANIMAL,
+            string(
+                abi.encodePacked("There is only ", MAX_ANIMAL, " available. Please call ____ to find an available petId")
+            )
+        );
         if (adopters[_petId] == address(0)) {
             animals[_petId]= Animal(
+                _name,
                 generateAnimalKind(),
                 generateAnimalAge()
             );
@@ -40,6 +46,23 @@ contract Adoption {
 
     function generateAnimalAge() public view returns (uint) {
         return uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, randNone))) % 100;
+    }
+
+    function getAvailablePetId() public view returns (uint[] memory) {
+        address nullAddress= address(0);
+        uint[] memory allPetId= new uint[](MAX_ANIMAL);
+        uint j= 0;
+        for (uint i = 0; i < MAX_ANIMAL; i++) {
+            if (adopters[i] == nullAddress) {
+                allPetId[j]= i;
+                j++;
+            }
+        }
+        uint[] memory availablePetId= new uint[](j);
+        for (uint i = 0; i < j; i++) {
+            availablePetId[i]= allPetId[i];
+        }
+        return availablePetId;
     }
 
     function getAdopters() public view returns (address[MAX_ANIMAL] memory) {
