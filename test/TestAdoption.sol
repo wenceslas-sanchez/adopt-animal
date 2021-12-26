@@ -45,7 +45,6 @@ contract TestAdoption {
     }
 
     function testGetAvailablePetId() public {
-        uint[] memory expectedAvailablePetId;
         uint[] memory resultAvailablePetId;
         adoption.adoptAnimal(2, "Alice");
         adoption.adoptAnimal(3, "Alice");
