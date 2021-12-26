@@ -7,8 +7,6 @@ from eth_account.signers.local import LocalAccount
 from web3.contract import Contract
 from logging import getLogger
 
-from src.contract_abi import abi
-
 current_dir= os.path.dirname(os.path.realpath(__file__))
 logger= getLogger("Adoption Interface")
 
