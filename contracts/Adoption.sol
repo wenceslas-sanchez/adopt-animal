@@ -4,7 +4,7 @@ contract Adoption {
     struct Animal {
         string name;
         string kind;
-        uint age;
+        uint8 age;
     }
     uint constant MAX_ANIMAL= 10; // max number of available animals.
     uint constant DOG_PROBA= 60;
@@ -14,12 +14,17 @@ contract Adoption {
 
     event AdoptAnimalEvent(uint id, address owner);
 
-    function adoptAnimal(uint _petId, string memory _name) public {
+    modifier petIdExists(uint _petId) {
         require(_petId>= 0 && _petId < MAX_ANIMAL,
             string(
-                abi.encodePacked("There is only ", MAX_ANIMAL, " available. Please call ____ to find an available petId")
+                abi.encodePacked("There is only ", MAX_ANIMAL,
+                " available. Please call ____ to find an available petId")
             )
         );
+        _;
+    }
+
+    function adoptAnimal(uint _petId, string memory _name) public petIdExists(_petId) {
         if (adopters[_petId] == address(0)) {
             animals[_petId]= Animal(
                 _name,
@@ -44,8 +49,8 @@ contract Adoption {
         return kind;
     }
 
-    function generateAnimalAge() public view returns (uint) {
-        return uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, randNone))) % 100;
+    function generateAnimalAge() public view returns (uint8) {
+        return uint8(uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, randNone)))) % 100;
     }
 
     function getAvailablePetId() public view returns (uint[] memory) {
