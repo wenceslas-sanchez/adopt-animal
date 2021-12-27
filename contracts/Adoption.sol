@@ -5,6 +5,7 @@ contract Adoption {
         string name;
         string kind;
         uint8 age;
+        uint32 lastFeed;
     }
     uint constant MAX_ANIMAL= 10; // max number of available animals.
     uint constant DOG_PROBA= 60;
@@ -29,7 +30,8 @@ contract Adoption {
             animals[_petId]= Animal(
                 _name,
                 generateAnimalKind(),
-                generateAnimalAge()
+                generateAnimalAge(),
+                uint32(now)
             );
             adopters[_petId] = msg.sender;
             emit AdoptAnimalEvent(_petId, msg.sender);
