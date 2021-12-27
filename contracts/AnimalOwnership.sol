@@ -8,12 +8,17 @@ contract AnimalOwnership is Adoption, Ownable, ERC721 {
     constructor() ERC721("TestAnimalAdoption", "ANI"){
     }
 
+    modifier onlyOwnerOf(uint _petId) {
+        require(msg.sender == ownerOf(_petId));
+        _;
+    }
+
     function balanceOf(address _owner) public override view returns (uint256 _balance) {
         return 1;
     }
 
-    function ownerOf(uint256 _tokenId) public override view returns (address _owner) {
-        return address(0);
+    function ownerOf(uint256 _tokenId) public override view petIdExists returns (address _owner) {
+        return adopters[_tokenId];
     }
 
     function transferFrom(address _from, address _to, uint _tokenId) public override {
