@@ -1,5 +1,6 @@
-var Adoption = artifacts.require("Adoption");
+var AnimalFeeding = artifacts.require("AnimalFeeding");
+
 
 module.exports = function(deployer) {
-    deployer.deploy(Adoption);
+    deployer.deploy(AnimalFeeding);
 };
