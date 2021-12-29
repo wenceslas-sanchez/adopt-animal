@@ -14,7 +14,7 @@ contract AnimalFeeding is AnimalOwnership {
         _;
     }
 
-    function isPetAlive(uint _petId) public returns (bool){
+    function isPetAlive(uint _petId) public petIdAssigned(_petId) returns (bool){
         Animal storage animal= animals[_petId];
         if (!animal.alive) {
             return false;
