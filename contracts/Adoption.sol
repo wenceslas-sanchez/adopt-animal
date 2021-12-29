@@ -32,7 +32,7 @@ contract Adoption {
                 _name,
                 generateAnimalKind(),
                 generateAnimalAge(),
-                uint32(now),
+                uint32(block.timestamp),
                 true
             );
             adopters[_petId] = msg.sender;
