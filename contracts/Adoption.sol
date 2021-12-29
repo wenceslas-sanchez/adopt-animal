@@ -20,7 +20,7 @@ contract Adoption {
         require(_petId>= 0 && _petId < MAX_ANIMAL,
             string(
                 abi.encodePacked("There is only ", MAX_ANIMAL,
-                " available. Please call ____ to find an available petId")
+                " available. Please call getAvailablePetId method to find an available petId.")
             )
         );
         _;
