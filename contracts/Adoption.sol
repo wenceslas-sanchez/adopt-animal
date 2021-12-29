@@ -17,13 +17,53 @@ contract Adoption {
     event AdoptAnimalEvent(uint id, address owner);
 
     modifier petIdExists(uint _petId) {
-        require(_petId>= 0 && _petId < MAX_ANIMAL,
+        _petExist(_petId);
+        _;
+    }
+
+    modifier petIdAssigned(uint _petId) {
+        _petExist(_petId);
+        _petAssigned(_petId);
+        _;
+    }
+
+    function _petExist(uint _petId) internal view {
+        require(_petId >= 0 && _petId < MAX_ANIMAL,
             string(
                 abi.encodePacked("There is only ", MAX_ANIMAL,
                 " available. Please call getAvailablePetId method to find an available petId.")
             )
         );
-        _;
+    }
+
+    function _petAssigned(uint _petId) internal view {
+        bool assigned= false;
+        uint[] memory allAvailable= getAvailablePetId();
+
+        for (uint i= 0; i < allAvailable.length + 1; i++) {
+            if (_petId == allAvailable[i]) {
+                assigned= true;
+                break;
+            }
+        }
+        require(assigned, "This pet is already assigned to a user.");
+    }
+
+    function getAvailablePetId() public view returns (uint[] memory) {
+        address nullAddress= address(0);
+        uint[] memory allPetId= new uint[](MAX_ANIMAL);
+        uint j= 0;
+        for (uint i = 0; i < MAX_ANIMAL; i++) {
+            if (adopters[i] == nullAddress) {
+                allPetId[j]= i;
+                j++;
+            }
+        }
+        uint[] memory availablePetId= new uint[](j);
+        for (uint i = 0; i < j; i++) {
+            availablePetId[i]= allPetId[i];
+        }
+        return availablePetId;
     }
 
     function adoptAnimal(uint _petId, string memory _name) public petIdExists(_petId) {
@@ -57,21 +97,5 @@ contract Adoption {
         return uint8(uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, randNone)))) % 100;
     }
 
-    function getAvailablePetId() public view returns (uint[] memory) {
-        address nullAddress= address(0);
-        uint[] memory allPetId= new uint[](MAX_ANIMAL);
-        uint j= 0;
-        for (uint i = 0; i < MAX_ANIMAL; i++) {
-            if (adopters[i] == nullAddress) {
-                allPetId[j]= i;
-                j++;
-            }
-        }
-        uint[] memory availablePetId= new uint[](j);
-        for (uint i = 0; i < j; i++) {
-            availablePetId[i]= allPetId[i];
-        }
-        return availablePetId;
-    }
 }
 
