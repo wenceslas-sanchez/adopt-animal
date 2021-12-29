@@ -11,8 +11,8 @@ contract Adoption {
     uint constant MAX_ANIMAL= 10; // max number of available animals.
     uint constant DOG_PROBA= 60;
     uint8 randNone= 0; // may overflow, this is not an issue
-    address[MAX_ANIMAL] private adopters;
-    Animal[MAX_ANIMAL] private animals;
+    address[MAX_ANIMAL] public adopters;
+    Animal[MAX_ANIMAL] public animals;
 
     event AdoptAnimalEvent(uint id, address owner);
 
