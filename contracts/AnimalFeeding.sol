@@ -3,8 +3,8 @@ pragma solidity ^0.8.0;
 import {AnimalOwnership} from "./AnimalOwnership.sol";
 
 contract AnimalFeeding is AnimalOwnership {
-    uint coolDown= 7 days;
-    uint foodCost= 0.00000001 ether;
+    uint public coolDown= 7 days;
+    uint public foodCost= 0.00000001 ether;
 
     event AnimalFeed(uint _petId, address _owner);
     event AnimalDead(uint _petId);
@@ -34,7 +34,7 @@ contract AnimalFeeding is AnimalOwnership {
         coolDown= _coolDown;
     }
 
-    function feedAnimal(uint _petId, address _owner) public payable onlyOwnerOf(_petId) petAlive(_petId) {
+    function feedAnimal(uint _petId) public payable onlyOwnerOf(_petId) petAlive(_petId) {
         require(msg.value == foodCost);
         Animal storage animal= animals[_petId];
         animal.lastFeed= uint32(block.timestamp); // update lastFeed value
