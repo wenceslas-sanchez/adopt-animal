@@ -2,13 +2,13 @@ pragma solidity ^0.8.11;
 
 import {Assert} from "truffle/Assert.sol";
 import {DeployedAddresses} from "truffle/DeployedAddresses.sol";
-import {Adoption} from "../contracts/Adoption.sol";
+import {AnimalFeeding} from "../contracts/AnimalFeeding.sol";
 
 contract TestAdoption {
     // defined in Adoption contract
     uint constant MAX_ANIMAL= 10; // max number of available animals.
     // Instantiate global contract
-    Adoption adoption= Adoption(DeployedAddresses.Adoption());
+    AnimalFeeding adoption= AnimalFeeding(DeployedAddresses.AnimalFeeding());
 
     function testAdoptAnimal() public {
         // Before adoption, adopters is full fo null address
