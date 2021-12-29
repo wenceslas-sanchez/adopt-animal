@@ -17,7 +17,7 @@ contract AnimalOwnership is Adoption, Ownable, ERC721 {
         return 1;
     }
 
-    function ownerOf(uint256 _tokenId) public override view petIdExists returns (address _owner) {
+    function ownerOf(uint256 _tokenId) public override view petIdExists(_tokenId) returns (address) {
         return adopters[_tokenId];
     }
 
