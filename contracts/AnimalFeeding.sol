@@ -14,11 +14,12 @@ contract AnimalFeeding is AnimalOwnership {
         _;
     }
 
-    function isPetAlive(uint _petId) returns (bool){
-        if (!animals[_petId].alive) {
+    function isPetAlive(uint _petId) public returns (bool){
+        Animal storage animal= animals[_petId];
+        if (!animal.alive) {
             return false;
-        } else if (animals[_petId].lastFeed <= coolDown) {
-            animals[_petId].alive= false;
+        } else if (animal.lastFeed <= coolDown) {
+            animal.alive= false;
             emit AnimalDead(_petId);
             return false;
         }
@@ -35,8 +36,8 @@ contract AnimalFeeding is AnimalOwnership {
 
     function feedAnimal(uint _petId, address _owner) public payable onlyOwnerOf(_petId) petAlive(_petId) {
         require(msg.value == foodCost);
-        Animal animal= animals[_petId];
-        animal.lastFeed= uint32(now); // update lastFeed value
+        Animal storage animal= animals[_petId];
+        animal.lastFeed= uint32(block.timestamp); // update lastFeed value
         emit AnimalFeed(_petId, msg.sender);
     }
 }
