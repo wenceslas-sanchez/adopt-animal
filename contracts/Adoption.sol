@@ -73,14 +73,5 @@ contract Adoption {
         }
         return availablePetId;
     }
-
-    function getAdopters() public view returns (address[MAX_ANIMAL] memory) {
-        return adopters;
-    }
-
-    function getAnimals() public view returns (Animal[MAX_ANIMAL] memory) {
-        return animals;
-    }
-
 }
 
