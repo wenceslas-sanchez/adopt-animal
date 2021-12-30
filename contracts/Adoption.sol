@@ -27,7 +27,7 @@ contract Adoption {
         _;
     }
 
-    function _petExist(uint _petId) internal view {
+    function _petExist(uint _petId) public pure {
         require(_petId >= 0 && _petId < MAX_ANIMAL,
             string(
                 abi.encodePacked("There is only ", MAX_ANIMAL,
@@ -38,9 +38,11 @@ contract Adoption {
 
     function _petAssigned(uint _petId) internal view {
         bool assigned= false;
-        uint[] memory allAvailable= getAvailablePetId();
+        uint[] memory allAvailable;
+        uint numAvailable;
+        (allAvailable, numAvailable)= getAvailablePetId();
 
-        for (uint i= 0; i < allAvailable.length + 1; i++) {
+        for (uint i= 0; i < numAvailable; i++) {
             if (_petId == allAvailable[i]) {
                 assigned= true;
                 break;
@@ -49,7 +51,7 @@ contract Adoption {
         require(assigned, "This pet is already assigned to a user.");
     }
 
-    function getAvailablePetId() public view returns (uint[] memory) {
+    function getAvailablePetId() public view returns (uint[] memory, uint) {
         address nullAddress= address(0);
         uint[] memory allPetId= new uint[](MAX_ANIMAL);
         uint j= 0;
@@ -63,7 +65,7 @@ contract Adoption {
         for (uint i = 0; i < j; i++) {
             availablePetId[i]= allPetId[i];
         }
-        return availablePetId;
+        return (availablePetId, j);
     }
 
     function adoptAnimal(uint _petId, string memory _name) public petIdExists(_petId) {
@@ -98,4 +100,3 @@ contract Adoption {
     }
 
 }
-
