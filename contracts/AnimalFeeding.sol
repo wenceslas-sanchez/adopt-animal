@@ -17,7 +17,7 @@ contract AnimalFeeding is AnimalOwnership {
         Animal storage animal= animals[_petId];
         if (!animal.alive) {
             return false;
-        } else if (animal.lastFeed <= coolDown) {
+        } else if (animal.lastFeed <= uint32(block.timestamp)) {
             animal.alive= false;
             emit AnimalDead(_petId);
             return false;
@@ -36,7 +36,7 @@ contract AnimalFeeding is AnimalOwnership {
     function feedAnimal(uint _petId) public payable onlyOwnerOf(_petId) petAlive(_petId) {
         require(msg.value == foodCost);
         Animal storage animal= animals[_petId];
-        animal.lastFeed= uint32(block.timestamp); // update lastFeed value
+        animal.lastFeed= uint32(block.timestamp + coolDown); // update lastFeed value
         emit AnimalFeed(_petId, msg.sender);
     }
 }
