@@ -3,7 +3,6 @@ pragma solidity ^0.8.0;
 import {AnimalOwnership} from "./AnimalOwnership.sol";
 
 contract AnimalFeeding is AnimalOwnership {
-    uint public coolDown= 7 days;
     uint public foodCost= 0.00000001 ether;
 
     event AnimalFeed(uint _petId, address _owner);
