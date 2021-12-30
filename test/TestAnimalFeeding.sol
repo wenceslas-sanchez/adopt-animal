@@ -28,27 +28,33 @@ contract TestAnimalFeeding {
     }
 
     function testPetAlive() public {
-        AnimalFeeding.Animal memory animalAlice;
-        uint32 lastFeed; bool alive;
-
-        require(!animalAlice.alive, "No pet adopted yet. So the non-pet 'should be dead' because bool is null.");
-
+        bool alive;
         animalFeeding.adoptAnimal(0, "Alice");
-        (,,, lastFeed, alive)= animalFeeding.animals(0);
-        animalAlice.lastFeed= lastFeed;
-        animalAlice.alive= alive;
-        require(animalAlice.alive, "The new pet should be alive.");
+        (,,,, alive)= animalFeeding.animals(0);
+        require(alive, "The new pet should be alive.");
     }
 
+    // Not tested yet, can't mock block.timestamp
     function testPetNotAlive() public {
-        AnimalFeeding.Animal memory animalAlice;
         uint32 lastFeed;
+        bool alive;
 
         animalFeeding.adoptAnimal(1, "Alice");
-        animalAlice.alive= true;
-        animalAlice.lastFeed= uint32(block.timestamp - 7 days);
-        //animalFeeding.isPetAlive(1);
-        //require(!animalAlice.alive, "The new pet should not be alive.");
+        (,,, lastFeed,)= animalFeeding.animals(1);
+        //lastFeed= uint32(block.timestamp - 30 days);
+        //alive= animalFeeding.isPetAlive(1);
+        //require(!alive, "The new pet should not be alive.");
     }
 
+    // Not tested yet, can't mock block.timestamp
+    function testFeedAnimalAlive() public {
+        // We already have adopted 2 animals {0, 1}
+
+    }
+
+    // Not tested yet, can't mock block.timestamp
+    function testFeedAnimalDead() public {
+        // We already have adopted 2 animals {0, 1}
+
+    }
 }
