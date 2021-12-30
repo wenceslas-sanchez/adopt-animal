@@ -38,18 +38,18 @@ contract Adoption {
     }
 
     function _petAssigned(uint _petId) internal view {
-        bool assigned= false;
+        bool assigned= true;
         uint[] memory allAvailable;
         uint numAvailable;
         (allAvailable, numAvailable)= getAvailablePetId();
 
         for (uint i= 0; i < numAvailable; i++) {
             if (_petId == allAvailable[i]) {
-                assigned= true;
+                assigned= false;
                 break;
             }
         }
-        require(assigned, "This pet is already assigned to a user.");
+        require(assigned, "This pet is not assigned to a user.");
     }
 
     function getAvailablePetId() public view returns (uint[] memory, uint) {
@@ -75,7 +75,7 @@ contract Adoption {
                 _name,
                 generateAnimalKind(),
                 generateAnimalAge(),
-                uint32(block.timestamp),
+                uint32(block.timestamp + coolDown),
                 true
             );
             adopters[_petId] = msg.sender;
