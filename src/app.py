@@ -1,20 +1,20 @@
 import os
 import web3
 import json
+from dotenv import dotenv_values
 from typing import Any, Callable, Tuple
 from hexbytes import HexBytes
 from eth_account.signers.local import LocalAccount
 from web3.contract import Contract
 from logging import getLogger
 
+ENV_VARIABLE= dotenv_values("./../.env")
+
 current_dir= os.path.dirname(os.path.realpath(__file__))
 logger= getLogger("Adoption Interface")
 
-CONTRACT_ADDRESS= "0x876774b41083ed93499471062985a9581885834C"
-PROJECT_ID= "2e278e77b1f140f08e5be5b79a6face2"
-
 # We don't store inline both private key and secret project key
-BASE_INFURA_URL= f"https://:{os.getenv('INFURA_PRIVATE_KEY_PROJECT')}@ropsten.infura.io/v3/"
+BASE_INFURA_URL= f"https://:{ENV_VARIABLE['PROJECT_SECRET']}@ropsten.infura.io/v3/"
 if os.getenv("PRIVATE_KEY_DEV_META") is None:
     msg = "Environment variable is missing : PRIVATE_KEY_DEV_META"
     logger.error(msg)
@@ -23,11 +23,11 @@ if os.getenv("PRIVATE_KEY_DEV_META") is None:
 with open(current_dir+"/data/contract_abi.json", "r") as file:
     abi = json.dumps(json.load(file))
 
-w3= web3.Web3(web3.HTTPProvider(BASE_INFURA_URL+PROJECT_ID))
-contract= w3.eth.contract(address= CONTRACT_ADDRESS,
+w3= web3.Web3(web3.HTTPProvider(BASE_INFURA_URL+ENV_VARIABLE["PROJECT_ID"]))
+contract= w3.eth.contract(address= ENV_VARIABLE["CONTRACT_ADDRESS"],
                           abi= abi)
 
-account = w3.eth.account.privateKeyToAccount(os.getenv("PRIVATE_KEY_DEV_META"))
+account = w3.eth.account.privateKeyToAccount(ENV_VARIABLE["PRIVATE_ACCOUNT_KEY"])
 
 
 def get_func_method(contract, method) -> Tuple[Callable, bool]:
@@ -75,8 +75,8 @@ def transaction_method(contract: Contract,
 
     return w3.eth.send_raw_transaction(signed_txn.rawTransaction)
 
-transaction_method(contract, account, "adoptAnimal", **{"_petId": 3})
-call_method(contract, "getAdopters")
+transaction_method(contract, account, "adoptAnimal", **{"_petId": 1, "_name": "Alice"})
+call_method(contract, "getAvailablePetId")
 
 if __name__ == "__main__":
     pass
