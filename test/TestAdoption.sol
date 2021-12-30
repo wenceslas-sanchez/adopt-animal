@@ -43,6 +43,7 @@ contract TestAdoption {
 
     function testGetAvailablePetId() public {
         uint[] memory resultAvailablePetId;
+        uint length;
         adoption.adoptAnimal(2, "Alice");
         adoption.adoptAnimal(3, "Alice");
         adoption.adoptAnimal(4, "Alice");
@@ -50,8 +51,8 @@ contract TestAdoption {
         adoption.adoptAnimal(6, "Alice");
         adoption.adoptAnimal(7, "Alice");
         adoption.adoptAnimal(8, "Alice");
-        resultAvailablePetId= adoption.getAvailablePetId();
-        Assert.equal(resultAvailablePetId.length, 1, "Should stay only one pet.");
+        (resultAvailablePetId, length)= adoption.getAvailablePetId();
+        Assert.equal(length, 1, "Should stay only one pet.");
         Assert.equal(resultAvailablePetId[0], 9, "Should stay the 10-th pet.");
     }
 }
