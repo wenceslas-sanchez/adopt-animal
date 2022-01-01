@@ -41,6 +41,7 @@ def get_etherscan_response(network: NetworkEnum, params: dict):
 
 
 def get_contract_abi(network: NetworkEnum, address: str):
+    # Only for verified contract address
     params= {
             "module": "contract",
             "action": "getabi",
@@ -59,6 +60,24 @@ def get_last_block(network: NetworkEnum):
             "closest": "before",
             "apikey": API_KEY,
         }
+    return get_etherscan_response(network, params)
+
+
+def get_last_transaction(network: NetworkEnum, address: str):
+    result_last_block= get_last_block(network)
+
+    # TODO : set specific error, not Exception (mais j'ai la flemme pour le moment)
+    if not result_last_block["status"] == "1":
+        raise Exception("Flemme pour le moment")
+
+    start_block= int(result_last_block["result"])
+    params= {
+        "module": "account",
+        "action": "txlist",
+        "startblock": start_block - 1,
+        "address": address,
+        "apikey": API_KEY,
+    }
     return get_etherscan_response(network, params)
 
 
