@@ -8,6 +8,7 @@ from eth_account.signers.local import LocalAccount
 from web3.contract import Contract
 from logging import getLogger
 
+
 ENV_VARIABLE= dotenv_values("./../.env")
 
 current_dir= os.path.dirname(os.path.realpath(__file__))
