@@ -2,7 +2,7 @@ pragma solidity ^0.8.11;
 
 import {Game} from "./Game.sol";
 
-contract Sudoku is Game {
+contract NoughtsCrosses is Game {
     // 0 if not played yet, 1 for first player, 4 for second player
     uint8 constant frameSize= 3;
     uint8[2] playerNumber= [uint8(1), uint8(4)];
