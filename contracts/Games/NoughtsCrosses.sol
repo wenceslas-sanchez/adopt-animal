@@ -23,21 +23,35 @@ contract NoughtsCrosses is Game {
         return _frame;
     }
 
+    function _abs8(int8 x) internal pure returns (uint8 y) {
+        if (x < 0) {
+            y= uint8(-x);
+        } else {
+            y= uint8(x);
+        }
+    }
+
     function check(uint8[frameSize][frameSize] memory _frame, uint _player) public view returns (bool) {
         bool _iswin= false;
         for (uint8 i= 0; i < frameSize; i++) {
             uint8 h= 0;
             uint8 v= 0;
+            uint8 ld= 0;
+            uint8 rd= 0;
+            uint8 rd_i= _abs8(int8(i)-int8(frameSize)-1);
             for (uint8 j= 0; j < frameSize; j++) {
                 // check horizontal
                 h += _frame[i][j];
                 // check vertical
                 v += _frame[j][i];
-                // TODO check diag (both)
             }
             if (h == playerScoreWin[_player] || v == playerScoreWin[_player]) {
                 _iswin= true;
             }
+            // check left diagonal
+            ld += _frame[i][i];
+            // check right diagonal
+            rd += _frame[i][rd_i];
         }
 
         return _iswin;
