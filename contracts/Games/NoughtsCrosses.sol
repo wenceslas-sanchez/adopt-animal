@@ -37,6 +37,7 @@ contract NoughtsCrosses is Game {
         }
     }
 
+    // TODO: performance optimisation
     function check(uint8[frameSize][frameSize] memory _frame, uint256 _player)
         public
         view
