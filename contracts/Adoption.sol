@@ -11,7 +11,7 @@ contract Adoption {
     uint256 constant MAX_ANIMAL = 10; // max number of available animals.
     uint256 constant DOG_PROBA = 60;
     uint256 public coolDown = 7 days;
-    uint8 constant adoptingCost = 0.00001 ether; // will never change
+    uint256 constant adoptingCost = 0.0000001 ether; // will never change
     uint8 randNone = 0; // may overflow, this is not an issue
     address[MAX_ANIMAL] public adopters;
     Animal[MAX_ANIMAL] public animals;
