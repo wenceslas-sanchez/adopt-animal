@@ -47,7 +47,7 @@ contract AnimalOwnership is Adoption, Ownable, ERC721 {
         onlyOwnerOf(_tokenId)
     {
         animalApprovals[_tokenId] = _to;
-        petIdApprovals[_tokenId]= true;
+        petIdApprovals[_tokenId] = true;
         emit Approval(msg.sender, _to, _tokenId);
     }
 

@@ -9,9 +9,9 @@ contract NoughtsCrosses is Game {
     uint8[2] playerScoreWin = [uint8(3), uint8(12)];
 
     function generateGameFrame()
-    public
-    pure
-    returns (uint8[frameSize][frameSize] memory)
+        public
+        pure
+        returns (uint8[frameSize][frameSize] memory)
     {
         uint8[frameSize][frameSize] memory frame;
 
@@ -39,16 +39,15 @@ contract NoughtsCrosses is Game {
     }
 
     // TODO: performance optimisation
-    function checkWinner(uint8[frameSize][frameSize] memory _frame, uint256 _player)
-    public
-    view
-    returns (bool)
-    {
+    function checkWinner(
+        uint8[frameSize][frameSize] memory _frame,
+        uint256 _player
+    ) public view returns (bool) {
         uint8 h;
         uint8 v;
         uint8 rd_i;
-        uint8 ld= 0;
-        uint8 rd= 0;
+        uint8 ld = 0;
+        uint8 rd = 0;
         for (uint8 i = 0; i < frameSize; i++) {
             h = 0;
             v = 0;
@@ -67,7 +66,9 @@ contract NoughtsCrosses is Game {
             // check right diagonal
             rd += _frame[i][rd_i];
 
-            if (ld == playerScoreWin[_player] || rd == playerScoreWin[_player]) {
+            if (
+                ld == playerScoreWin[_player] || rd == playerScoreWin[_player]
+            ) {
                 return true;
             }
         }
