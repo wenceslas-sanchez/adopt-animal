@@ -2,6 +2,7 @@ pragma solidity ^0.8.11;
 
 import {Game} from "./Game.sol";
 
+// TODO find a way to make game instance
 contract NoughtsCrosses is Game {
     // 0 if not played yet, 1 for first player, 4 for second player
     uint8 constant frameSize = 3;
@@ -38,7 +39,6 @@ contract NoughtsCrosses is Game {
         return y;
     }
 
-    // TODO: performance optimisation
     function checkWinner(
         uint8[frameSize][frameSize] memory _frame,
         uint256 _player
