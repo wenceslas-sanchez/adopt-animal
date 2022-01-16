@@ -2,40 +2,65 @@ pragma solidity ^0.8.11;
 
 import {Game} from "./Game.sol";
 
-// TODO find a way to make game instance
 contract NoughtsCrosses is Game {
     // 0 if not played yet, 1 for first player, 4 for second player
     uint8 constant frameSize = 3;
     uint8[2] playerNumber = [uint8(1), uint8(4)];
     uint8[2] playerScoreWin = [uint8(3), uint8(12)];
+    struct NCGameInstance {
+        GameInstance game;
+        uint8[frameSize][frameSize] frame;
+    }
+    mapping(address => NCGameInstance) games;
 
-    function generateGameFrame()
-        public
-        pure
-        returns (uint8[frameSize][frameSize] memory)
-    {
+    modifier isAlreadyPlaying() {
+        bool _r= _isAlreadyPlaying();
+        require(!_r, "You already have a game instance. Please finish it or kill it.");
+        _;
+    }
+
+    modifier isNotAlreadyPlaying() {
+        bool _r= _isAlreadyPlaying();
+        require(_r, "You are not playing to this game. Please Start game instance.");
+        _;
+    }
+
+    function _isAlreadyPlayingCheck() public view virtual {
+        NCGameInstance memory NULL;
+        NULL= games[msg.sender];
+    }
+
+    function _isAlreadyPlaying() internal returns (bool _r) {
+        (_r, ) = address(msg.sender).call(
+            abi.encodePacked(this._isAlreadyPlayingCheck.selector)
+        );
+        return _r;
+    }
+
+    function killGameInstance() public virtual isNotAlreadyPlaying{
+        delete games[msg.sender];
+    }
+
+    function instanceGame(address _playerTwo) public isAlreadyPlaying {
         uint8[frameSize][frameSize] memory frame;
-
-        return frame;
+        games[msg.sender] = NCGameInstance(
+            GameInstance(msg.sender, _playerTwo, 0),
+            frame);
     }
 
     // Given (x, y), set value to frame
-    function _action(
+    function action(
         uint8[2] memory _coord,
         uint8[frameSize][frameSize] memory _frame,
         uint256 _player
-    ) public view returns (uint8[frameSize][frameSize] memory) {
+    ) public returns (uint8[frameSize][frameSize] memory) {
         _frame[_coord[0]][_coord[1]] = playerNumber[_player];
 
         return _frame;
     }
 
     function _abs8(int8 x) internal pure returns (uint8 y) {
-        if (x < 0) {
-            y = uint8(-x);
-        } else {
-            y = uint8(x);
-        }
+        y= (x < 0?uint8(-x):uint8(x));
         return y;
     }
 
