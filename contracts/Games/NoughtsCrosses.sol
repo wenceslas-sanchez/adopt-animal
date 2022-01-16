@@ -14,20 +14,26 @@ contract NoughtsCrosses is Game {
     mapping(address => NCGameInstance) games;
 
     modifier isAlreadyPlaying() {
-        bool _r= _isAlreadyPlaying();
-        require(!_r, "You already have a game instance. Please finish it or kill it.");
+        bool _r = _isAlreadyPlaying();
+        require(
+            !_r,
+            "You already have a game instance. Please finish it or kill it."
+        );
         _;
     }
 
     modifier isNotAlreadyPlaying() {
-        bool _r= _isAlreadyPlaying();
-        require(_r, "You are not playing to this game. Please Start game instance.");
+        bool _r = _isAlreadyPlaying();
+        require(
+            _r,
+            "You are not playing to this game. Please Start game instance."
+        );
         _;
     }
 
     function _isAlreadyPlayingCheck() public view virtual {
         NCGameInstance memory NULL;
-        NULL= games[msg.sender];
+        NULL = games[msg.sender];
     }
 
     function _isAlreadyPlaying() internal returns (bool _r) {
@@ -37,7 +43,7 @@ contract NoughtsCrosses is Game {
         return _r;
     }
 
-    function killGameInstance() public virtual isNotAlreadyPlaying{
+    function killGameInstance() public virtual isNotAlreadyPlaying {
         delete games[msg.sender];
     }
 
@@ -45,7 +51,8 @@ contract NoughtsCrosses is Game {
         uint8[frameSize][frameSize] memory frame;
         games[msg.sender] = NCGameInstance(
             GameInstance(msg.sender, _playerTwo, 0),
-            frame);
+            frame
+        );
     }
 
     // Given (x, y), set value to frame
@@ -60,7 +67,7 @@ contract NoughtsCrosses is Game {
     }
 
     function _abs8(int8 x) internal pure returns (uint8 y) {
-        y= (x < 0?uint8(-x):uint8(x));
+        y = (x < 0 ? uint8(-x) : uint8(x));
         return y;
     }
 
