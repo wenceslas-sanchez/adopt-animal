@@ -24,7 +24,11 @@ contract TestAdoption {
         // After adoption, there should be one adopter address.
         adoption.adoptAnimal(0, "Alice");
         expectedAdopters[0] = address(this);
-        Assert.equal(address(this), adoption.adopters(0), "First pet should have an owner.");
+        Assert.equal(
+            address(this),
+            adoption.adopters(0),
+            "First pet should have an owner."
+        );
     }
 
     // For testAdoptAnimalAlreadyAdopted method only
